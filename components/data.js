@@ -30,6 +30,11 @@ export const dataSlice = createSlice({
         d: state.value.d.concat([action.payload]),
       };
     },
+    editData: (state, action) => {
+      let s = state.value;
+      s.d[s.d.indexOf(action.payload.old)] = action.payload.new;
+      state.value = s;
+    },
     deleteData: (state, action) => {
       state.value = {
         ...state.value,
@@ -43,6 +48,7 @@ export const {check} = dataSlice.actions;
 export const {uncheck} = dataSlice.actions;
 export const {deleteData} = dataSlice.actions;
 export const {addData} = dataSlice.actions;
+export const {editData} = dataSlice.actions;
 export const {initialize} = dataSlice.actions;
 
 export default dataSlice.reducer;

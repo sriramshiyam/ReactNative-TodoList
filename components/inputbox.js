@@ -1,12 +1,13 @@
 import {Modal, FormControl, Input, AlertDialog, Button} from 'native-base';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {addData} from './data';
+import {addData, editData} from './data';
 
 const InputBox = props => {
   const [showModal, setShowModal] = useState(false);
   const [iswarningOpen, setIswarningOpen] = useState(false);
   const [input, setInput] = useState('');
+  const inputRef = useRef();
   const data = useSelector(state => state.data.value);
   const dispatch = useDispatch();
 
@@ -28,7 +29,7 @@ const InputBox = props => {
             <FormControl>
               <Input
                 value={input}
-                placeholder="Enter a Task"
+                placeholder="Type here ..."
                 onChangeText={text => setInput(text)}
               />
             </FormControl>
@@ -46,11 +47,15 @@ const InputBox = props => {
               </Button>
               <Button
                 onPress={() => {
-                  if (
-                    data.d.includes(input) ||
-                    data.d.includes(Number(input))
-                  ) {
+                  if (data.d.includes(input) || data.c.includes(input)) {
                     setIswarningOpen(true);
+                  } else if (props.canedit) {
+                    dispatch(editData({old: props.old, new: input}));
+                    setTimeout(() => {
+                      setInput('');
+                      setShowModal(false);
+                      props.edited();
+                    }, 200);
                   } else {
                     dispatch(addData(input));
                     setTimeout(() => {

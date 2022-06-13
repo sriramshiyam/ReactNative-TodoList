@@ -13,7 +13,7 @@ export default function Hstack2(props) {
 
   return (
     <HStack space={5} alignItems="center">
-      <Pressable onPress={checkc}>
+      <Pressable onPress={checkc} onLongPress={() => props.edit(props.text)}>
         <Box
           p={5}
           backgroundColor={props.color}

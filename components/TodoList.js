@@ -14,10 +14,24 @@ import {useDispatch} from 'react-redux';
 const TodoList = () => {
   const dispatch = useDispatch();
   const data = useSelector(state => state.data.value);
+  const [canEdit, setCanEdit] = useState(false);
+  const [old, setOld] = useState('');
   const [showDialog, setShowDialog] = useState(false);
   const [tasks, setTasks] = useState([]);
 
   function sd() {
+    setShowDialog(false);
+  }
+
+  function edit(o) {
+    setOld(o);
+    setCanEdit(true);
+    setShowDialog(true);
+  }
+
+  function edited() {
+    setOld('');
+    setCanEdit(false);
     setShowDialog(false);
   }
 
@@ -90,6 +104,7 @@ const TodoList = () => {
                 key={c[0]}
                 text1={c[0]}
                 text2={c[1]}
+                edit={edit}
                 color1={colors[Math.floor(Math.random() * colors.length)]}
                 color2={colors[Math.floor(Math.random() * colors.length)]}
               />,
@@ -101,6 +116,7 @@ const TodoList = () => {
               <Hstack2
                 key={c[0]}
                 text={c[0]}
+                edit={edit}
                 color={colors[Math.floor(Math.random() * colors.length)]}
               />,
             );
@@ -143,7 +159,13 @@ const TodoList = () => {
           <Pressable onPress={() => setShowDialog(true)}>
             <AddButton />
           </Pressable>
-          <InputBox show={showDialog} sd={sd} />
+          <InputBox
+            show={showDialog}
+            sd={sd}
+            canedit={canEdit}
+            edited={edited}
+            old={old}
+          />
         </VStack>
         <ClearedTasks />
       </ScrollView>

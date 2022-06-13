@@ -106,7 +106,7 @@ const ClearedTasks = () => {
         fontSize={30}>
         Completed Tasks
       </Text>
-      <VStack py={2} safeArea={true} space={5} alignItems="center" px={7}>
+      <VStack pt={2} pb={8} safeArea={true} space={5} alignItems="center" px={7}>
         {clearedtasks}
       </VStack>
     </>

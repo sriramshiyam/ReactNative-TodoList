@@ -18,7 +18,7 @@ export default function Hstack1(props) {
   return (
     <HStack space={5} alignItems="center">
       {/* First Box */}
-      <Pressable onPress={check1}>
+      <Pressable onPress={check1} onLongPress={() => props.edit(props.text1)}>
         <Box
           p={5}
           backgroundColor={props.color1}
@@ -31,7 +31,7 @@ export default function Hstack1(props) {
         </Box>
       </Pressable>
       {/* Second Box */}
-      <Pressable onPress={check2}>
+      <Pressable onPress={check2}  onLongPress={() => props.edit(props.text2)}>
         <Box
           p={5}
           backgroundColor={props.color2}
