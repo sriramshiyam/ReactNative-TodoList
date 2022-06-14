@@ -1,7 +1,7 @@
 import {VStack, ScrollView, Text} from 'native-base';
 import React, {useEffect, useState} from 'react';
-import {Dimensions, Pressable, StatusBar, BackHandler} from 'react-native';
-import {useSelector} from 'react-redux';
+import {Dimensions, Pressable, StatusBar, Appearance} from 'react-native';
+import {} from 'react-redux';
 import AddButton from './add';
 import ClearedTasks from './clearedTasks';
 import Hstack1 from './hstack1';
@@ -9,7 +9,7 @@ import Hstack2 from './hstack2';
 import InputBox from './inputbox';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {initialize} from './data';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 const TodoList = () => {
   const dispatch = useDispatch();
@@ -140,7 +140,11 @@ const TodoList = () => {
   return (
     <>
       <StatusBar
-        barStyle="dark-content"
+        barStyle={
+          Appearance.getColorScheme() === 'dark'
+            ? 'light-content'
+            : 'dark-content'
+        }
         backgroundColor="rgba(0, 0, 0, 0)"
         translucent
       />
@@ -149,6 +153,7 @@ const TodoList = () => {
         showsVerticalScrollIndicator={false}>
         <Text
           pt={10}
+          color={Appearance.getColorScheme() === 'dark' ? 'white' : 'black'}
           display={data.d.length > 0 ? 'flex' : 'none'}
           textAlign="center"
           fontSize={30}>

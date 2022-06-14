@@ -1,7 +1,7 @@
 import React from 'react';
 import LottieView from 'lottie-react-native';
 import {Box, Center, HStack, Text} from 'native-base';
-import {Dimensions} from 'react-native';
+import {Appearance, Dimensions} from 'react-native';
 
 const AddButton = props => {
   return (
@@ -18,7 +18,10 @@ const AddButton = props => {
             source={require('./lottie-animation/add.json')}
             autoPlay
           />
-          <Text pt={1} fontSize={15}>
+          <Text
+            pt={1}
+            color={Appearance.getColorScheme() === 'dark' ? 'white' : 'dark'}
+            fontSize={15}>
             Add Task
           </Text>
         </Center>

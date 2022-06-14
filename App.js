@@ -14,7 +14,7 @@ const store = configureStore({
 const App = () => {
 
   return (
-    <>
+    <>  
       <NativeBaseProvider>
         <Provider store={store}>
           <TodoList />

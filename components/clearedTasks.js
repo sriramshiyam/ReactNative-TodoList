@@ -1,6 +1,6 @@
 import {Text, VStack} from 'native-base';
 import React, {useEffect, useState} from 'react';
-import {StatusBar} from 'react-native';
+import {Appearance} from 'react-native';
 import {useSelector} from 'react-redux';
 import Hstackclear1 from './hstackclear1';
 import Hstackclear2 from './hstackclear2';
@@ -94,19 +94,21 @@ const ClearedTasks = () => {
 
   return (
     <>
-      <StatusBar
-        barStyle="dark-content"
-        backgroundColor="rgba(0, 0, 0, 0)"
-        translucent
-      />
       <Text
         pt={2.5}
+        color={Appearance.getColorScheme() === 'dark' ? 'white' : 'dark'}
         display={data.c.length > 0 ? 'flex' : 'none'}
         textAlign="center"
         fontSize={30}>
         Completed Tasks
       </Text>
-      <VStack pt={2} pb={8} safeArea={true} space={5} alignItems="center" px={7}>
+      <VStack
+        pt={2}
+        pb={8}
+        safeArea={true}
+        space={5}
+        alignItems="center"
+        px={7}>
         {clearedtasks}
       </VStack>
     </>
