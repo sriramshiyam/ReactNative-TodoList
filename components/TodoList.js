@@ -1,7 +1,6 @@
 import {VStack, ScrollView, Text} from 'native-base';
 import React, {useEffect, useState} from 'react';
 import {Dimensions, Pressable, StatusBar, Appearance} from 'react-native';
-import {} from 'react-redux';
 import AddButton from './add';
 import ClearedTasks from './clearedTasks';
 import Hstack1 from './hstack1';
