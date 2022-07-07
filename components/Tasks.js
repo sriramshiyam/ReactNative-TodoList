@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from "react";
 import {
   StyleSheet,
   StatusBar,
-  View,
   ScrollView,
   Pressable,
   TextInput,
@@ -11,6 +10,7 @@ import {
   ToastAndroid,
   useColorScheme,
 } from "react-native";
+import BouncyCheckbox from "react-native-bouncy-checkbox";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Task } from "./Task";
@@ -32,10 +32,10 @@ export default function Tasks() {
   const [text, setText] = useState("");
   const [canAdd, setCanAdd] = useState(false);
   const [tasks, setTasks] = useState(false);
-  const scale = useSharedValue(1);
   const dispatch = useDispatch();
   const INPUTHEIGHT = useSharedValue(0);
   const INPUTPADDING = useSharedValue(0);
+  const SCALE = useSharedValue(1);
   const data = useSelector((state) => state.data.value);
 
   const inputStyle = useAnimatedStyle(() => {
@@ -64,11 +64,21 @@ export default function Tasks() {
     }, 200);
   });
 
+  const addButtonStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: SCALE.value }],
+    };
+  });
+
+  const scaleChange = () => {
+    SCALE.value = SCALE.value === 1 ? withTiming(0) : withTiming(1);
+  };
+
   const rend = () => {
     let d = data.d;
     let t = [];
     for (const data of d) {
-      t.push(<Task key={data} text={data}></Task>);
+      t.push(<Task key={data} text={data} scaleChange={scaleChange}></Task>);
     }
     setTasks(t);
     return () => {
@@ -103,17 +113,27 @@ export default function Tasks() {
             ]}
           >
             {canAdd ? (
+              <BouncyCheckbox
+                isChecked={false}
+                size={35}
+                fillColor="#7c7cfc"
+                unfillColor="#FFFFFF"
+                iconStyle={{ borderColor: "#7c7cfc", borderRadius: 15 }}
+              />
+            ) : (
+              <Text></Text>
+            )}
+            {canAdd ? (
               <TextInput
                 key={"add"}
                 onChangeText={(text) => setText(text)}
                 value={text}
                 style={{
-                  fontSize: 17,
+                  fontSize: 15,
                   color: colorScheme === "light" ? "#000" : "#fff",
                 }}
                 autoFocus
                 onFocus={() => {
-                  scale.value = withTiming(0);
                   INPUTHEIGHT.value = withTiming(70);
                   INPUTPADDING.value = withTiming(15);
                 }}
@@ -125,7 +145,7 @@ export default function Tasks() {
           {tasks}
         </ScrollView>
       </GestureHandlerRootView>
-      <View style={[styles.add]}>
+      <Animated.View style={[styles.add, addButtonStyle]}>
         <Pressable
           onPress={() =>
             setCanAdd((prev) => {
@@ -162,7 +182,7 @@ export default function Tasks() {
             <Ionicons name="add" size={30} color="#fff" />
           )}
         </Pressable>
-      </View>
+      </Animated.View>
     </>
   );
 }
@@ -200,5 +220,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-start",
     alignItems: "center",
+    marginBottom: 10,
   },
 });

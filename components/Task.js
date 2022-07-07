@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TextInput,
   useColorScheme,
+  ToastAndroid,
 } from "react-native";
 import { PanGestureHandler } from "react-native-gesture-handler";
 import Animated, {
@@ -16,12 +17,12 @@ import Animated, {
 } from "react-native-reanimated";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { check, delet, editData, uncheck } from "./data";
 
 const SCREENWIDTH = Dimensions.get("window").width;
 
-const Task = ({ text }) => {
+const Task = ({ text, scaleChange }) => {
   const colorScheme = useColorScheme();
   const dispatch = useDispatch();
   const [canEdit, setCanEdit] = useState(false);
@@ -34,6 +35,7 @@ const Task = ({ text }) => {
   const OPACITY = useSharedValue(1);
   const tOPACITY = useSharedValue(1);
   const tX = useSharedValue(0);
+  const data = useSelector((state) => state.data.value);
 
   useEffect(() => {
     setT(text);
@@ -102,6 +104,7 @@ const Task = ({ text }) => {
       onPress={() =>
         setCanEdit((prev) => {
           if (text[0] !== "`") {
+            scaleChange();
             return !prev;
           }
         })
@@ -154,7 +157,9 @@ const Task = ({ text }) => {
             />
             {canEdit ? (
               <TextInput
-                onChangeText={(e) => setT(e)}
+                onChangeText={(e) => {
+                  setT(e);
+                }}
                 value={t}
                 style={{
                   fontSize: 15,
@@ -162,7 +167,25 @@ const Task = ({ text }) => {
                 }}
                 autoFocus
                 onBlur={() => {
-                  dispatch(editData({ old: text, new: t }));
+                  scaleChange();
+                  if (t.length === 0) {
+                    ToastAndroid.show(
+                      "Empty tasks are not allowed",
+                      ToastAndroid.SHORT
+                    );
+                    setT(text);
+                  } else if (
+                    data.d.some((n) => n === "`" + t) ||
+                    data.d.some((n) => n === t)
+                  ) {
+                    if (t === text) {
+                    } else {
+                      ToastAndroid.show("Enter a new task", ToastAndroid.SHORT);
+                    }
+                    setT(text);
+                  } else {
+                    dispatch(editData({ old: text, new: t }));
+                  }
                   setCanEdit((prev) => !prev);
                 }}
               />
